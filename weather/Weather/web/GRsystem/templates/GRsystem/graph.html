@@ -1,0 +1,143 @@
+{% extends "GRsystem/index.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<style>
+
+
+td.color_1{ background-color: #7FFF00; }
+td.color_2{ background-color: yellow; }
+table {
+    counter-reset: tableCount;     
+}
+.counterCell:before {              
+    content: counter(tableCount); 
+    counter-increment: tableCount; 
+}
+.form-required { display: none; }
+.requiredField
+{
+  display:none;
+}
+
+</style>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-0 ">
+		     <div class="list-group ">
+			
+			 {% if user.is_authenticated  %}
+			 
+               <a href="" class="list-group-item list-group-item-action active"> Welcome : {{user.first_name}} </a>
+              <a href='/dashboard/' class="list-group-item list-group-item-action">Weather</a>
+			  <a href="/stats/" class="list-group-item list-group-item-action">Weather Statistics</a>
+			    <a href="/form/" class="list-group-item list-group-item-action">InputData</a>
+			    <a href="/graphs/" class="list-group-item list-group-item-action">Graph</a>
+
+              <a href='/password/' class="list-group-item list-group-item-action">Password Reset</a>
+
+              {% endif %}
+              
+              
+            </div> 
+		</div>
+    
+		<div class="col-md-10">
+		    <div class="card">
+		        <div class="card-body">
+		            <div class="row">
+		                <div class="col-md-3">
+		
+		                    
+		                </div>
+		            </div>
+		            <div class="row">
+		                <div class="col-md-12" style="margin:10px">
+		                 <form action="/graphs/" method="POST"> 
+                     {% csrf_token %}
+  <div class="row">
+    <div class="col-xs-6 col-md-4">
+      <div class="input-group">
+        <input type="text" class="form-control" name="search" placeholder="Search" id="txtSearch"/>
+        <div class="input-group-btn">
+          <button class="btn btn-primary" type="submit">
+            Search
+          </button>
+         
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+<br>
+<div class="container">
+ <p class=" text-uppercase h3 ">   CITY: {{ search_query }}</p>
+ </div>
+                <div id="container">
+                 <br>
+  
+                </div>
+  <script src="https://code.highcharts.com/highcharts.src.js"></script>
+  <script>
+    Highcharts.chart('container', {
+      
+        chart: {
+            type: 'line'
+        },
+        title: {
+            text: 'Temperature'
+        },
+        
+        xAxis: {
+           title: {
+        text: 'Date'
+    },
+         gridLineWidth: 1,
+           categories: [
+            {% for entry in datasets %}'{{ entry.Date }}'{% if not forloop.last %}, {% endif %}{% endfor %}
+          ],
+        
+        },
+         yAxis: {
+          gridLineDashStyle: 'longdash',
+           labels: {
+        formatter: function() {
+            return this.value + ' °C';
+        },
+       
+     
+    },  gridLineWidth: 1,
+           gridLineColor: 'grey',
+           title: {
+        text: 'Temperature'
+    },
+            min: 0,
+            max: 50,
+          
+        },
+        series: [{
+          name: 'Temp',
+          data: [
+            {% for entry in dataset %}{{ entry.Temp }}{% if not forloop.last %}, {% endif %}{% endfor %}
+          ],
+          color: 'blue'
+      },
+      ]
+    });
+  </script>
+  <br>
+  <br>
+		    </div>
+            
+		</div>
+        
+	</div>
+    
+</div> 
+ 
+				
+           
+		            
+		
+{% endblock content %}

@@ -1,0 +1,106 @@
+{% extends "GRsystem/index.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.css" />
+ <style>
+ .card {display:inline-block;}
+ </style>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-0 ">
+		
+		     <div class="list-group ">
+			
+			 {% if user.is_authenticated %}
+			 
+                  <a href="" class="list-group-item list-group-item-action active"> Welcome : {{user.first_name}} </a>
+              <a href='/dashboard/' class="list-group-item list-group-item-action">Weather</a>
+			  <a href="/stats/" class="list-group-item list-group-item-action">Weather Statistics</a>
+			    <a href="/form/" class="list-group-item list-group-item-action">InputData</a>
+				 <a href="/graphs/" class="list-group-item list-group-item-action">Graph</a>
+              <a href='/password/' class="list-group-item list-group-item-action">Password Reset</a>
+
+
+              
+            
+              {% endif %}
+              
+              
+            </div> 
+		</div>
+		
+		<div class="col-md-10">
+		    <div class="card">
+		        <div class="card-body">
+		            <div class="row">
+		                <div class="col-md-3">
+		                 
+		                    
+		                </div>
+		            </div>
+		            <div class="row">
+		                <div class="col-md-12" style="margin:10px">
+						{% if messages %}
+<ul>
+	{% for message in messages %}
+	   <div{% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>
+	   <a class="close" data-dismiss="alert" href="#">&times;</a>
+      {{ message }}
+    </div>
+	{% endfor %}
+</ul>
+{% endif %}
+
+    <section class="section">
+        <div class="container">
+            <div class="row">
+            
+				
+                    {% for weather in weather_data %}
+					  <div class="col-2">
+					  <div class="card" style="width: rem;">
+					  <img class="card-img-top" style="width: 22rem;"src="http://openweathermap.org/img/w/{{ weather.icon }}.png"  alt="Card image cap">
+  <div class="card-header" style="width: 12rem;" >
+    Weather Data
+  </div>
+  <ul class="list-group list-group-flush" style="width: 12rem;">
+    <li class="list-group-item ">City: <b>{{ weather.city }}</b></li>
+    <li class="list-group-item">Temperature:<b>{{ weather.temperature }}° C</b></li>
+    <li class="list-group-item">Description: <b>{{ weather.description }}</b></li>
+	<li class="list-group-item">Temp_Min: <b>{{ weather.temp_min }}</b></li>
+	<li class="list-group-item">Temp_Max: <b>{{ weather.temp_max }}</b></li>
+	<li class="list-group-item">Wind Speed: <b>{{ weather.wind }}</b></li>
+	<li class="list-group-item">Country: <b>{{ weather.country }}</b></li>
+  </ul>
+</div>
+</div>
+				
+					<br>
+					<br>
+
+                  
+				
+                    {% endfor %}
+                </div>
+            </div>
+        
+    </section>
+	
+
+
+		                </div>
+		            </div>
+		        </div>
+		    </div>
+		</div>
+	</div>
+</div>
+               
+                
+				
+				
+           
+		            
+		
+{% endblock content %}
